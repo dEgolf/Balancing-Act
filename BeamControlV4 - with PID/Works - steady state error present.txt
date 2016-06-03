@@ -1,0 +1,20 @@
+Desired = 300
+Actual = 350 or so (pretty consistent)
+Next day: is around 320 or so now - interesting
+
+It might be important to get rid of the oscillation due to derivative stuff (?)
+-I'm going to try adding a (capped) I and see how it works, at any rate
+
+I'm capping Icontr
+-Should also probably cap the total (more instant updates)
+
+Some reflections:
+-Several important parameters to mess with for the I term
+:where to cap it (max contribution)
+:where to cap the error total (memory)
+:how fast to update it (I coefficient)(
+
+Perforamance compared to straight PD:
+-Visually it's comparable
+-I did tone down D (9 -> 8), so there's a bit less wobbling
+-How's the steady state error?
