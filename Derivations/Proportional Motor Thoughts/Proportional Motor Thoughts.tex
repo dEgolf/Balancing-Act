@@ -1,0 +1,102 @@
+% This is the preamble
+
+\documentclass[a4paper]{article}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Richard Arkusinski and David Egolf}
+%\chead{Digital Control}
+\rhead{Proportional Digital Servo Thoughts}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath,amscd} % For math formatting, commutative diagrams
+\usepackage{graphicx}
+\usepackage{hyperref} 
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\usepackage{graphicx}
+\graphicspath{ {images9/} }
+\usepackage{tcolorbox}
+\usepackage{commath}
+\usepackage{gensymb}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage{listings}
+
+\begin{document}
+Let us assume that the servo motor driving our beam has a proportional controller in it.\\
+Our strategy will be this:
+\begin{enumerate}
+\item Create an equation that describes the proportional control of the motor
+\item Rewrite this equation in the state space formalism
+\item List assumptions used, so that this work can be included as part of a larger control structure
+\end{enumerate}
+\subsection*{Proportional DC Servo Motor Control: Equation of Motion}
+We control the DC servo motor by sending a PWM command. This PWM commands tells it what angle it should go to. Let's call this desired angle $\theta_{des}$.
+\\\\
+We model the resulting angular velocity $ \dot{\theta}$ of the motor by saying it is proportional to the difference between the current angle of the motor, $\theta$, and the desired angle, $\theta_{des}$:
+\begin{align*}
+ \dot{\theta} = -k_p \cdot (\theta-\theta_{des})
+\end{align*}
+where $k_p$ is a positive constant of proportionality.
+\\\\
+We have written the sum in a way to make it look like negative feedback. For example, notice that if $\theta > \theta_{des}$, then $ \dot{\theta}$ becomes negative to compensate. The further the shaft of the motor is from the desired position, the faster it will spin to reach that position.
+\\\\
+It is worth noting that the desired angle will not always be 0, even if we wish to balance the ball in the center of the beam. This is because we need to tip the beam to move the ball.
+\subsection*{Converting DC Servo Motor Control to State Space}
+We want to describe the system in the following form:
+\begin{align*}
+\dot{x} = Ax + Bu
+\end{align*}
+where $x$ is a vector of states and $u$ is the input.
+\\\\
+Comparing with the equation above, we set:
+\begin{itemize}
+\item $x = \theta$
+\item $A = -k_p$
+\item $B = k_p$
+\item $u = \theta_{des}$
+\end{itemize}
+The results are:
+\begin{align*}
+\dot{\theta} = -k_p \cdot \theta + k_p \cdot \theta_{des}
+\end{align*}
+\subsection*{Assumptions}
+\begin{itemize}
+\item We assume that $\dot{\theta}$ can change really fast in response to a change in $\theta_{des}$. This assumption is plausible because the motor used is pretty powerful relative to the weight of the cardboard beam and ping-pong ball.
+\item We assume that nothing except the motor changes $\theta$ or $\dot{\theta}$. This is a reasonable assumption because the weight of the ping-pong ball relative to the strength of the motor is very small.
+\end{itemize}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

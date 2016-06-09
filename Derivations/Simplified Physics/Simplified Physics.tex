@@ -1,0 +1,117 @@
+% This is the preamble
+
+\documentclass[a4paper]{article}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Richard Arkusinski and David Egolf}
+%\chead{Digital Control}
+\rhead{Simplified Physics}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath,amscd} % For math formatting, commutative diagrams
+\usepackage{graphicx}
+\usepackage{hyperref} 
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\usepackage{graphicx}
+\graphicspath{ {images9/} }
+\usepackage{tcolorbox}
+\usepackage{commath}
+\usepackage{gensymb}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage{listings}
+
+\begin{document}
+In deriving the state space equation for the motor control, we made a couple assumptions:\begin{itemize}
+\item We assume that $\dot{\theta}$ can change really fast in response to a change in $\theta_{des}$. This assumption is plausible because the motor used is pretty powerful relative to the weight of the cardboard beam and ping-pong ball.
+\item We assume that nothing except the motor changes $\theta$ or $\dot{\theta}$. This is a reasonable assumption because the weight of the ping-pong ball relative to the strength of the motor is very small.
+\end{itemize}
+We want to create the equations of motion for the full system under these simplifying assumptions.
+\\\\
+\textbf{Our strategy will be:}
+\begin{enumerate}
+\item Get the torque input in terms of $\theta_{des}$, the desired angle of the shaft
+\item Get the unsimplified equations for the system
+\item Assume the mass of the beam and the torque due to the ball are very small
+\item Determine simplified equations for the system
+\end{enumerate}
+\section*{Relate $\theta_{des}$ and Input Torque}
+Here is our strategy:
+\begin{enumerate}
+\item Neglect the mass of the ball for simplification
+\item Relate torque to angular acceleration
+\item Relate angular acceleration to angular velocity by differentiating relationship between angular velocity and angular position
+\item Relate angular acceleration to angular position and reference angle using undifferentiated motor control equation
+\item Relate torque to angular position and reference angle
+\end{enumerate}
+
+\subsection*{Neglect Mass of Ball}
+If we neglect the (very small) mass of the ping-pong ball, then the angular inertia of the beam-ball system becomes constant. This simplifies everything.
+
+\subsection*{Torque $\rightarrow$ Angular Acceleration}
+The angular analogue to $F = ma$ is:
+\begin{align*}
+\tau = I \ddot{\theta}
+\end{align*}
+where $\tau$ is the net torque on the shaft, $I$ is the angular inertia of the beam (recall we neglect the mass of the ball), and $\ddot{\theta}$ is the angular acceleration of the beam.
+\subsection*{Angular Acceleration $\rightarrow$ Angular Velocity}
+In the document ``Proportional Motor Thoughts", we found the following to be true (under the assumptions listed at the top of this file):
+\begin{align*}
+\dot{\theta} = -k_p \cdot \theta + k_p \cdot \theta_{des}
+\end{align*}
+where $k_p$ is a positive constant of proportionality.
+\\\\
+Differentiating this result, we find:
+\begin{align*}
+\ddot{\theta} = -k_p \cdot \dot{\theta}
+\end{align*}
+if we assume that $\dot{\theta}$ doesn't change suddenly over this interval, and that $\theta_{des}$ is held constant over this interval. In fact, these two assumptions are really just one assumption, since $\ddot{\theta}$ will always exist unless  $\theta_{des}$ is not held constant. 
+
+\subsection*{Angular Acceleration $\rightarrow$ Angular Position}
+Combining the two equations from above (valid when $\theta_{des}$ is constant)
+\begin{align*}
+\dot{\theta} &= -k_p \cdot \theta + k_p \cdot \theta_{des} \\
+\ddot{\theta} &= -k_p \cdot \dot{\theta}
+\end{align*}
+we find
+\begin{align*}
+\ddot{\theta} = -k_p  \cdot (-k_p \cdot \theta + k_p \cdot \theta_{des}) = k_p^2  \cdot  \theta -  k_p^2 \cdot \theta_{des} = k_p^2 \cdot (\theta - \theta_{des})
+\end{align*}
+
+\subsection*{Torque $\rightarrow$ Angular Position}
+Summarizing all our work so far (valid when $\theta_{des}$ is constant):
+\begin{align*}
+\tau &= I \ddot{\theta} \\
+\ddot{\theta} &= k_p^2 \cdot (\theta - \theta_{des})
+\end{align*}
+Combining these equations:
+\begin{align*}
+\tau &= I \cdot k_p^2 \cdot (\theta - \theta_{des})
+\end{align*}
+which relates the desired variables.
+
+\section*{Unsimplified Equations of System}
+In the document ``Ball on Ramp Derivation" we found the following Lagrangian equations:
+\begin{align*}
+\left(\frac{J_{ball}}{r_{ball}^2} + m_{ball} \right) \cdot \ddot{p} - m_{ball} \cdot p \cdot \dot{\theta}^2 + m_{ball} \cdot g \cdot \sin(\theta) = 0 \\
+\left(p^2\cdot m_{ball}+ J_{ramp} \right) \cdot \ddot{\theta} + 2 \cdot p \cdot \dot{p} \cdot m_{ball} \cdot \dot{\theta} + m_{ball} \cdot g \cdot p \cdot \cos(\theta) = \tau
+\end{align*}
+The next step is to plug in our expressions for $\tau$, $\dot{\theta}$ and $\ddot{\theta}$ into these equations, in order to capture our assumptions about how the motor control works. 
+
+
+
+
+\end{document}
